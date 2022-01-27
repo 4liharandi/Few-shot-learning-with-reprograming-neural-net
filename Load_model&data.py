@@ -1,4 +1,14 @@
+from torchvision import transforms
+from skimage.transform import resize
+from torch.utils.data import DataLoader
+from torchvision.datasets import Omniglot, CIFAR10
+from torchvision.models import resnet18
+from easyfsl.data_tools import TaskSampler
+from torchvision.transforms import Normalize
+import numpy as np
 
+
+#load pretreined model and data
 
 model = resnet18(pretrained=True)
 image_size = 224
@@ -65,6 +75,8 @@ test_loader = DataLoader(
 )
 
 
+#define gaussian blurring for regularize weight and gradient 
+
 def gaussian_kernel(size=5, sigma=0.7):
 
     x = np.linspace(-1,1,size)
@@ -75,21 +87,9 @@ def gaussian_kernel(size=5, sigma=0.7):
     return np.expand_dims(kernel, 0)
 
 
-device = torch.device('cuda')
-class AddGaussianNoise(object):
-    def __init__(self, mean=0., std=1.):
-        self.std = std
-        self.mean = mean
-        
-    def __call__(self, tensor):
-        return tensor + torch.randn(tensor.size()) * self.std + self.mean
-    
-    def __repr__(self):
-        return self.__class__.__name__ + '(mean={0}, std={1})'.format(self.mean, self.std)
-    
 def blur(weight, sigma, size=5, padding=2):
     blur_kernel = torch.Tensor(gaussian_kernel(size=size, sigma=sigma)).to(device).repeat((1,1,1,1))
-#     print(blur_kernel.requires_grad)
+
     weight[0] = F.conv2d(weight[0].unsqueeze(0).unsqueeze(0), blur_kernel, padding=padding)
     weight[1] = F.conv2d(weight[1].unsqueeze(0).unsqueeze(0), blur_kernel, padding=padding)
     weight[2] = F.conv2d(weight[2].unsqueeze(0).unsqueeze(0), blur_kernel, padding=padding)
