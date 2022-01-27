@@ -6,4 +6,4 @@ Train contains Omniglot dataset with 100 episodes. you can change default number
 
 
 # training
-python train.py --problem randommask --ppar 0.2 --snr 10 --batchsize 256
+python main.py --num_epoch 100 --lr 0. --num_ensembles 10
