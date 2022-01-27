@@ -22,7 +22,7 @@ from easyfsl.utils import plot_images, sliding_average
 import seaborn as sns
 from sklearn.manifold import TSNE
 import pandas as pd 
-from my_models import generator, latent_generator
+from Adversarial_Reprogramming import Program, Advprogram
 from Load_model_weight import *
 
 
