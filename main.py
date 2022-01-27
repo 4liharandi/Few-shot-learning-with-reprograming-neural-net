@@ -116,16 +116,14 @@ def run_epoch(mode,glob_blur_sigma, train_images, train_labels, test_images, tes
 
 N_EVALUATION_TASKS = 100
 
-v = 0
-h=0
-pr = 0
-ee=0
-oo = 0
-pp=0
-qq=0
+sum_avg_dis = 0
+sum_weighted_avg_acc=0
+sum_max_acc = 0
+sum_best_acc = 0
+
 for i in range(N_EVALUATION_TASKS):
 
-    a = 0
+    best_acc = 0
     av = 0
     
     num_ens =10
@@ -191,7 +189,7 @@ for i in range(N_EVALUATION_TASKS):
         
         if test_metrics['accuracy'] > a:
                 
-            a = test_metrics['accuracy']
+            best_acc = test_metrics['accuracy']
                 
     train_labels = train_labels.to(device)
     test_labels = test_labels.to(device)
@@ -223,15 +221,15 @@ for i in range(N_EVALUATION_TASKS):
     print('max rep is: {}'.format(max_acc))
     print('avg diss is: {}'.format(acc_avgd))
     print('weighted diss is: {}'.format(acc_avgdw))
-    ee+=max_acc
-    h+=acc_avgdw
-    oo += a
-    v +=acc_avgd
+    sum_max_acc+=max_acc
+    sum_weighted_avg_acc+=acc_avgdw
+    sum_best_acc += best_acc
+    sum_avg_dis +=acc_avgd
     
 print('*************************')
 print('final result ')
 print('**********')
-print('avg best acc {} '.format(oo / N_EVALUATION_TASKS))
-print('avg max rep acc {} '.format(ee / N_EVALUATION_TASKS))
-print('avg dis acc {} '.format(v / N_EVALUATION_TASKS))
-print('avg weighted dis rep acc {} '.format(h / N_EVALUATION_TASKS))
+print('avg best acc {} '.format(avg_best_acc / N_EVALUATION_TASKS))
+print('avg max rep acc {} '.format(sum_max_acc / N_EVALUATION_TASKS))
+print('avg dis acc {} '.format(sum_avg_dis / N_EVALUATION_TASKS))
+print('avg weighted dis rep acc {} '.format(sum_weighted_avg_acc / N_EVALUATION_TASKS))
