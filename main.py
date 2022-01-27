@@ -9,7 +9,6 @@ import urllib
 from PIL import Image as im
 from torchvision import models
 from torch.utils.data import Dataset, DataLoader
-from PIL import Image
 import numpy as np
 import skimage.io
 from tqdm import tqdm
@@ -17,28 +16,26 @@ from torch import nn, optim
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 from torchvision import transforms
-from torchvision import transforms
-from skimage.transform import resize
-from torch.utils.data import DataLoader
-from torchvision.datasets import Omniglot, CIFAR10
-from torchvision.models import resnet18
-from easyfsl.data_tools import TaskSampler
 from torchvision.transforms import Normalize
 from sklearn.metrics import roc_auc_score
 from easyfsl.utils import plot_images, sliding_average
+import seaborn as sns
+from sklearn.manifold import TSNE
+import pandas as pd 
+from my_models import generator, latent_generator
+from Load_model_weight import *
 
-lr=0.01
+
+FLAGS, unparsed = flags()
+
+num_epochs = FLAGS.num_epochs
+lr = FLAGS.lr
+num_ensemble = FLAGS.num_ensemble
+
 wd=0.00
 lmd= 0.01
 decay_step=2
 lr_decay=0.96
-num_epochs = 100
-#torch.backends.cudnn.deterministic = True
-#torch.manual_seed(3407)
-
-import seaborn as sns
-from sklearn.manifold import TSNE
-import pandas as pd 
 
 for param in model.parameters():    
     param.requires_grad = False
@@ -46,34 +43,6 @@ for param in model.parameters():
 device = torch.device('cuda')
 model = model.to(device)
 
-def mixup_data(x, y, alpha=1.0, use_cuda=True):
-    
-    '''Returns mixed inputs, pairs of targets, and lambda'''
-    if alpha > 0:
-        lam = np.random.beta(alpha, alpha)
-    else:
-        lam = 1
-
-    batch_size = x.size()[0]
-    if use_cuda:
-        index = torch.randperm(batch_size).cuda()
-    else:
-        index = torch.randperm(batch_size)
-
-    mixed_x = lam * x + (1 - lam) * x[index, :]
-    y_a, y_b = y, y[index]
-    return mixed_x, y_a, y_b, lam
-
-
-def mixup_criterion(criterion, pred, y_a, y_b, lam):
-    return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
-
-class Identity(torch.nn.Module):
-    def __init__(self):
-        super(Identity, self).__init__()
-        
-    def forward(self, x):
-        return x
     
 def run_epoch(mode,glob_blur_sigma, train_images, train_labels, test_images, test_labels, device = device, num_classes =15, optimizer=None, epoch=None, loss_criterion=None):
        
