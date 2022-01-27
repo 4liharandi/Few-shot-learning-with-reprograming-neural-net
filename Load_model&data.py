@@ -9,7 +9,7 @@ import numpy as np
 
 
 #load pretreined model and data
-
+#for improve performance you can use other pretrained models
 model = resnet18(pretrained=True)
 image_size = 224
 pimg_size = (224,224)
