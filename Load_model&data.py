@@ -93,3 +93,31 @@ def blur(weight, sigma, size=5, padding=2):
     weight[0] = F.conv2d(weight[0].unsqueeze(0).unsqueeze(0), blur_kernel, padding=padding)
     weight[1] = F.conv2d(weight[1].unsqueeze(0).unsqueeze(0), blur_kernel, padding=padding)
     weight[2] = F.conv2d(weight[2].unsqueeze(0).unsqueeze(0), blur_kernel, padding=padding)
+
+    
+    
+def flags():
+
+    parser = argparse.ArgumentParser()
+     
+    parser.add_argument(
+        '--num_epochs',
+        type=int,
+        default=100,
+        help='number of epochs to train for')
+    
+    parser.add_argument(
+        '--lr',
+        type=float,
+        default= 0.01,
+        help='learning rate')
+    
+    parser.add_argument(
+        '--num_ensemble',
+        type=float,
+        default= 10,
+        help='number of ensemble')
+    
+    
+    FLAGS, unparsed = parser.parse_known_args()
+    return FLAGS, unparsed
