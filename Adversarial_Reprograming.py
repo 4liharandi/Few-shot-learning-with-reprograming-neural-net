@@ -1,3 +1,6 @@
+##define adversarial reporogramming model
+
+#define weight additive weight
 
 class Program(nn.Module):
     def __init__(self, out_size):
@@ -10,6 +13,7 @@ class Program(nn.Module):
         x = self.weight.mul(x)
         return x
 
+#define module for adding weight to inputs
 
 class AdvProgram(nn.Module):
     def __init__(self,in_size, out_size, mask_size, device=torch.device('cuda')):
