@@ -1,0 +1,11 @@
+pytorch
+easyfsl
+scipy
+scikit-learn
+opencv-python
+matplotlib
+requests
+urllib
+PIL
+tqdm
+
