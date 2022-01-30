@@ -1,5 +1,5 @@
 # Few-shot-learning-with-adversarial-reprograming-neural-net
-This repository contains few shot learning with ensemble adversarial reprogramming of pretrained neural net.
+This repository contains Pytorch few shot learning with ensemble adversarial reprogramming of pretrained neural net.
 Addversarial Reporogramming come from paper "Adversarial Reprogramming of Neural Networks", Gamaleldin F. Elsayed 2018.
 Pretrained network which used in this project is resnet18. for better results, you can use a better-pretrained network like Efficient net.
 For train, you should follow all codes in one script and then run.
