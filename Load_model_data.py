@@ -49,30 +49,6 @@ test_set = Omniglot(
         
 )
 
-N_WAY = 5 # Number of classes in a task
-N_SHOT = 5 # Number of images per class in the support set
-N_QUERY = 10 # Number of images per class in the query set
-N_EVALUATION_TASKS = 100
-
-test_set.labels = [
-    instance[1] for instance in test_set._flat_character_images
-]
-
-test_sampler = TaskSampler(
-    test_set, 
-    n_way=N_WAY, 
-    n_shot=N_SHOT, 
-    n_query=N_QUERY, 
-    n_tasks=N_EVALUATION_TASKS,
-)
-
-test_loader = DataLoader(
-    test_set,
-    batch_sampler=test_sampler,
-    num_workers=2,
-    pin_memory=True,
-    collate_fn=test_sampler.episodic_collate_fn,
-)
 
 
 #define gaussian blurring for regularize weight and gradient 
@@ -114,10 +90,33 @@ def flags():
     
     parser.add_argument(
         '--num_ensemble',
-        type=float,
+        type=int,
         default= 10,
         help='number of ensemble')
+   
+    parser.add_argument(
+        '--num_way',
+        type=int,
+        default= 10,
+        help='number of class')
     
+    parser.add_argument(
+        '--num_shot',
+        type=int,
+        default= 10,
+        help='number of train')
+            
+    parser.add_argument(
+        '--num_query',
+        type=int,
+        default= 10,
+        help='number of test')
+    
+     parser.add_argument(
+        '--num_tasks',
+        type=int,
+        default= 100,
+        help='number of episodes')
     
     FLAGS, unparsed = parser.parse_known_args()
     return FLAGS, unparsed
