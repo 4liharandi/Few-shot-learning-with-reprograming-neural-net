@@ -32,6 +32,32 @@ num_epochs = FLAGS.num_epochs
 lr = FLAGS.lr
 num_ensemble = FLAGS.num_ensemble
 
+N_WAY = FLAGS.way # Number of classes in a task
+N_SHOT = FLAGS.shot # Number of images per class in the support set
+N_QUERY = FLAGS.query # Number of images per class in the query set
+N_EVALUATION_TASKS = FLAGS.num_tasks # Number of episodes
+
+test_set.labels = [
+    instance[1] for instance in test_set._flat_character_images
+]
+
+test_sampler = TaskSampler(
+    test_set, 
+    n_way=N_WAY, 
+    n_shot=N_SHOT, 
+    n_query=N_QUERY, 
+    n_tasks=N_EVALUATION_TASKS,
+)
+
+test_loader = DataLoader(
+    test_set,
+    batch_sampler=test_sampler,
+    num_workers=2,
+    pin_memory=True,
+    collate_fn=test_sampler.episodic_collate_fn,
+)
+
+
 wd=0.00
 lmd= 0.01
 decay_step=2
