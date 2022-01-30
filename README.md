@@ -7,7 +7,9 @@ For train, you should follow all codes in one script and then run.
 
 # training
 
- python main.py --num_epoch 100 --lr 0. --num_ensembles 10
+ python main.py --num_epoch 100 --lr 0.01 --num_ensembles 10 --num_episode 100 --num_way 5 --num_shot 5 --num_query 10
+ 
+ For 10 ensemble for each episode need near 60 seconds time.
  
  In training several accuray shown which based on how to ensemble results:
  1.average of all distribuations 
